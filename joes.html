@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Joe's Hot Dogs | Online Order</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: rgb(175, 78, 54);
+            font-family: sans-serif;
+        }
+
+        header {
+            color: rgb(238, 175, 112);
+            text-align: center;
+        }
+
+        #logo h1 {
+            font-style: italic;
+            letter-spacing: -0.75pt;
+            font-size: 40pt;
+            margin: auto;
+        }
+
+        #sub h3 {
+            letter-spacing: -0.5pt;
+            font-size: 22pt;
+            margin: auto;
+        }
+
+        h4 {
+            letter-spacing: -0.5pt;
+            font-size: 19pt;
+            font-weight:bold;
+            margin: auto;
+        }
+
+        .ordersummary{
+            color: rgb(175, 78, 54);
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            width: 250px;
+            background-color: rgb(238, 175, 112);
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        #header {
+            color: rgb(175, 78, 54);
+            margin-bottom: 10px;
+        }
+
+        .order, .subtotals {
+            font-size: 14pt;
+            background-color: rgb(238, 175, 112);
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .subtotals {
+            padding-left: 26px;
+        }
+
+        th {
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            font-weight: normal;
+        }
+
+        .order, .subtotals {
+            width: 250px;
+        }
+
+        #a, #b, #c, #d {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id=logo>
+            <h1>JOE'S HOT DOGS</h1>
+        </div>
+        <div id=sub>
+            <h3>Get your bun in here!</h3>
+        </div>
+        <br>
+    </header>
+    <section>
+        <div class = ordersummary>
+            <div id = "header">
+                <h4>Your Order Summary</h4>
+            </div>
+            <table class="order">
+                <tr>
+                    <th>Quantity</th>
+                    <th>Item</th>
+                    <th>Price</th>
+                </tr>
+                <tr>
+                    <td id="desiredHD"></td>
+                    <td>Hot Dogs</td>
+                    <td id="subHD"></td>
+                </tr>
+                <tr>
+                    <td id="desiredFries"></td>
+                    <td>Fries</td>
+                    <td id="subFries"></td>
+                </tr>
+                <tr>
+                    <td id="desiredSodas"></td>
+                    <td>Sodas</td>
+                    <td id="subSodas"></td>
+                </tr>
+            </table>
+        <table class="subtotals">
+            <tr>
+                <th><!--Type--></th>
+                <th><!--Subtotal--></th>
+            </tr>
+            <tr>
+                <td id="a">Subtotal</td>
+                <td id="subtotal"></td>
+            </tr>
+            <tr>
+            <tr>
+                <td id="b">Joe's Discount</td>
+                <td id="discount"></td>
+            </tr>
+                <td id="c">Tax</td>
+                <td id="tax"></td>
+            </tr>
+            <tr>
+                <td id="d">Total</td>
+                <td id="finalTotal"></td>
+            </tr>
+        </table>
+    </div>
+    </section>
+    <script>
+        /*sets customers' desired item numbers*/
+        var numHDs     = prompt("How many hot dogs would you like?");
+        var numFries   = prompt("How many fries would you like?")
+        var numSodas   = prompt("How many sodas would you like?")
+    
+        document.getElementById("desiredHD").innerHTML    = numHDs;
+        document.getElementById("desiredFries").innerHTML = numFries;
+        document.getElementById("desiredSodas").innerHTML = numSodas;
+
+
+        /* provided a number parameter, round() returns a string with the 
+           newly rounded number*/
+        function round(unroundedNum) {
+            // Makes parameter into string
+            var unroundTotal = String(unroundedNum); 
+            // If the number's length is 1
+            if (unroundTotal.indexOf(".") == -1) {
+                var x = unroundTotal + ".00";
+                return x;
+            } else {
+                // Split the input string into two arrays containing 
+                // integers/decimals
+                var separate = unroundTotal.split('.');
+
+                // If only one decimal place is found
+                if (separate[1].length < 2) {
+                    return separate[0] + "." + separate[1] + "0";
+                // If the number is already rounded
+                } else if (separate[1].length == 2) {
+                    return separate[0] + "." + separate[1];
+                // If the second array is longer than 2 digits
+                } else if (separate[1].length > 2) {
+                    var root = separate[0] + '.';
+                    var round = separate[1].substring(0,3);
+                    var compare = round[2];
+                    var change = round[1];
+                    var same = round[0];
+
+                    // change x and y into temporary ints
+                    let x = parseInt(compare);
+                    let y = parseInt(change);
+
+                    if (x >= 5) {
+                        y += 1;
+                    } else if (x <= 4) {
+                        y = y;
+                    }
+
+                    y = "" + y;
+
+                    var finalTotalString = root + same + y;
+
+                    return finalTotalString;
+                }
+            }
+        }
+
+        /*calculate the price for each item*/
+        calcHD    = (numHDs)   => {return 4.00 * numHDs;}
+        calcFries = (numFries) => {return 3.50 * numFries;}
+        calcSodas = (numSodas) => {return 1.75 * numSodas;}
+
+        /*set calculated price to a variable*/
+        var priceHD    = calcHD(numHDs);
+        var priceFries = calcFries(numFries);
+        var priceSodas = calcSodas(numSodas);
+
+        document.getElementById("subHD").innerHTML    = "$" + round(priceHD);
+        document.getElementById("subFries").innerHTML = "$" + round(priceFries);
+        document.getElementById("subSodas").innerHTML = "$" + round(priceSodas);
+
+        /*calculate the subtotal*/
+        calcSubtotal = (priceHD, priceFries, priceSodas) => 
+        {return priceHD + priceFries + priceSodas;}
+
+        /*set the subtotal without tax to a variable*/
+        var subtotal = calcSubtotal(priceHD, priceFries, priceSodas);
+
+        document.getElementById("subtotal").innerHTML = "$" + round(subtotal);
+
+        /*calculates discount if the subtotal is >= 20*/
+        if (subtotal >= 20.00) {
+            var joesDiscount = subtotal * 0.10;
+            var noTaxTotal = subtotal * 0.90;
+            document.getElementById("discount").innerHTML = "-$" + round(joesDiscount);
+        } else {
+            noTaxTotal = subtotal;
+            document.getElementById("discount").innerHTML = "N/A";
+        }
+
+        /*calculates the tax of the previously found subtotal*/
+        calcTax = (noTaxTotal) => {return noTaxTotal * 0.0625;}
+
+        /*sets up the tax variable*/
+        var tax = calcTax(noTaxTotal);
+
+        document.getElementById("tax").innerHTML = "$" + round(tax);
+
+        /*adds the tax to the previously found subtotal*/
+        addTax = (noTaxTotal) => {return noTaxTotal + tax;}
+        
+        /*sets up the unrounded total*/
+        var unroundTotal = addTax(noTaxTotal);
+
+        document.getElementById("finalTotal").innerHTML = "$" + round(unroundTotal);
+    </script>
+</body>
+</html>
